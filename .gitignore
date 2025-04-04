@@ -172,3 +172,14 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Google Cloud credentials
+*.json
+
+# DBT Cloud/CLI artifacts
+dbt_modules/
+dbt_packages/
+target/
+dbt_logs/
+
+
