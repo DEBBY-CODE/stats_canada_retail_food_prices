@@ -40,9 +40,9 @@ models:
     staging:
       +schema: "{{ target.name }}"
     core.dimensions:
-      +schema: _analytics_mart
+      +schema: analytics_mart
     core.facts:
-      +schema: _analytics_mart
+      +schema: analytics_mart
 
 seeds:
   stats_canada_avg_retail_food_prices:
