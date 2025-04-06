@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: fact_monthly_avg_food_prices
+    description: "Fact table storing the monthly average food prices by product, region, and date, link to dim tables to get more context of product and region information"
+    columns:
+      - name: fact_price_id
+        tests: [not_null, unique]
+      - name: product_id
+        tests: [not_null]
+      - name: region_id
+        tests: [not_null]
+      - name: average_price
+        tests: [not_null]
+      - name: load_timestamp
+        description: "The UTC timestamp when the row was loaded into the data warehouse"
+        
+

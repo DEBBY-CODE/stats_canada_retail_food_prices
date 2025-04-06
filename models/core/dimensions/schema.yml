@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: "Unique products and their associated categories"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+      - name: product
+        tests: [not_null]
+
+  - name: dim_regions
+    description: "Unique region  and their types"
+    columns:
+      - name: region_id
+        tests: [not_null, unique]
+      - name: region
+        tests: [not_null]
