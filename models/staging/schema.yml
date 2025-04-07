@@ -1,0 +1,13 @@
+# models/staging/stats_canada_sources.yml
+
+version: 2
+
+sources:
+  - name: staging
+    database: capstone-project-453407
+    schema: raw_data
+
+
+    tables:
+      - name: stats_canada_raw
+        description: "Raw data of monthly average retail food prices from Statistics Canada "
