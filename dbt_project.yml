@@ -35,9 +35,8 @@ clean-targets: # directories to be removed by `dbt clean`
 
 models:
   stats_canada_avg_retail_food_prices:
-
     core:
-      +schema: "{{ target.name }}_analytics_mart"
+      +schema: "{{ target.schema }}_analytics_mart"
     
 
     
