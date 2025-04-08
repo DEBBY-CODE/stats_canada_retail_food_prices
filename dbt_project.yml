@@ -36,7 +36,14 @@ clean-targets: # directories to be removed by `dbt clean`
 models:
   stats_canada_avg_retail_food_prices:
     core:
-      +schema: "{{ target.schema }}_analytics_mart"
+      +schema: analytics_mart
     
+    staging:
+      +schema: staging
+  
+seeds:
+  stats_canada_avg_retail_food_prices:
+    +schema: staging
+  
 
     
