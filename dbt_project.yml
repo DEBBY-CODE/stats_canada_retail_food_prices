@@ -39,11 +39,11 @@ models:
       +schema: gold_stats_canada_mart
     
     staging:
-      +schema: silver_stats_canada_staging
+      +schema: silver_stats_canada
   
 seeds:
   stats_canada_avg_retail_food_prices:
-    +schema: silver_stats_canada_staging
+    +schema: silver_stats_canada
 
 
     
