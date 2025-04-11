@@ -5,7 +5,7 @@ version: 2
 sources:
   - name: staging
     database: capstone-project-453407
-    schema: raw_data
+    schema: bronze_stats_canada_raw
 
 
     tables:
