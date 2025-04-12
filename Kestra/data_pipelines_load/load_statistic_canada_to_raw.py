@@ -6,7 +6,7 @@ import os
 
 
 # GCP Config
-PROJECT_ID =  os.getenv("GCP_PROJECT_ID", "Please insert your project-ID here ")
+PROJECT_ID =  os.getenv("GCP_PROJECT_ID", "Please insert your GCP project-ID here ")
 DATASET_ID = "bronze_stats_canada_raw"
 TABLE_ID = "stats_canada_raw"
 GCS_BUCKET = "stats-canada-data-lake-tf"
