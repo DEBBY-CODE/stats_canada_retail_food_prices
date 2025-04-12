@@ -54,6 +54,7 @@ Below are the data fields/columns  from the source:
 -	DECIMALS: Not crucial for analysis
 
 The key fields we'll be working within DBT will be ref_date, geo, products, uom and value
+
 ## Technology Stack
 - Google Cloud Storage (GCS): Object storage for source data, e.g. our CSV files extracted from our Stats Canada API
 
@@ -74,21 +75,111 @@ The key fields we'll be working within DBT will be ref_date, geo, products, uom 
 ## How to Reproduce the Project (Detailed Section)
 This section provides a step-by-step guide to replicating the entire pipeline, from infrastructure provisioning to dashboard development.
 
-You can choose to run everything locally on your system or use a Google Cloud VM for a fully cloud-based setup (as done in this project).
+As seen in section 2, this project uses a Compute Engine VM instance to run the ingestion and orchestration components. However, you can also run everything locally if preferred.
 
 ### 1. Prerequisites
-Before you begin, ensure you have the following tools and accounts:
+Before setting up the pipeline, ensure you have the following:  
+   A. Google Cloud Platform Account setup
+   
+   B. Install Terraform for infrastructure provisioning on your local machine or  VM. [Tutorial](https://youtu.be/Y2ux7gq3Z0o?si=7GL0HLtkApY2CaqG)
 
-a. Setup a  Google Cloud Platform (GCP) Account - If you set up a new free account, it expires in 90 days, meaning you have about $400 worth of credit to use until the 90 days expire.
+   C. Install Docker to run Kestra and support services on your local machine or VM. [Link](https://docs.docker.com/engine/install/)
 
-b. Create a new project and keep track of the project ID as we need to for a lot of authentication 
+   D. Create a free DBT Cloud account; we use DBT Cloud for this project, so there is no need to install DBT CLI. [Link](https://www.getdbt.com/signup)
 
-c. Create a  service account with the following roles : 
-- Big Query Admin
-- Storage Admin
-- Compute Admin
-b. Install Terraform on your VM machine or local system if you opt for recreating the project via this method.
-c. Install docker
+   E. Install Git for cloning this GitHub repository on your local machine or  VM.
+
+
+### 2. Datawarehouse - Google Cloud Platform ( GCP ) Setup :  
+- Create a Google Cloud Platform (GCP) account with billing enabled - If you set up a new free account, it expires in 90 days, meaning you have about $400 worth of credit to use until the 90 days expire.
+- Enable the following GCP APIs for the project: BigQuery API, Cloud Storage API, Compute Engine API.
+- Create a new GCP project via the Cloud Console and note down the Project ID, as you’ll need it throughout the setup process.
+- Create a Google Cloud Service Account with the following roles: BigQuery Admin, Storage Admin, Compute Admin.
+- Once the service account has been created, Create and Download the service account JSON key file in a secure location on your system. This will be used to authenticate Google services used to build the pipeline workflow with tools like Kestra, DBT, Power BI etc.
+
+📌OPTIONAL: Using a Google Cloud VM (Recommended Setup)
+
+To manage orchestration and transformations in a cloud environment, this project uses a Compute Engine VM manually created in Google Cloud.
+
+🔁 You can also choose to run everything locally on your machine if you prefer. The VM is optional but useful for separating environments and running Dockerized services like Kestra.
+
+Using a GCP VM, you can connect to it in two ways: Option 1 - SSH via gcloud CLI terminal  or Option 2 - VSCode Remote SSH Extension and install the required tools/resources, e.g., Terraform, docker, dbt, etc.
+
+For a more comfortable development experience, use option 2 - VS Code with the Remote SSH extension; below are  detailed links to set things up correctly:
+- How to create a GCP VM  [Setting Up A VM on GCP](https://youtu.be/18QgmuKq4zE?si=X2lsKFM_vLXxqb_0)
+- Connecting to your remote VM instance [Two Ways to Add SSH Keys GCP VM](https://youtu.be/91MXOH0VV7U?si=nXWZaJNx_Czo5plZ).
+- Additional Video to support  the first and second link [Setting Up A VM on GCP + SSH Access](https://www.youtube.com/watch?v=ae-CV2KfoN0&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=16)
+
+⚠️ Note: A newly created VM is essentially a bare system, it does not come pre-installed with the tools your project depends on.
+Once you have connected to the VM via the VS Code remote SSH extension, your VSCode remote instance should look similar to the image below with the name you've called your VM.
+![Screenshot (66)](https://github.com/user-attachments/assets/9b3168a3-4a87-47e6-bf2b-29a89c6d3cb1)
+
+Follow these steps to install the necessary packages and set up your environment:
+1. Install Git (so we can clone the repo)
+2. Clone this git repository to access the project files and dependencies
+3. Install system-level tools, e.g. Docker, Python packages, Terraform, etc from within the cloned project
+4. Install Pip & Python
+5. Install Python packages as seen in the requirements.txt file
+6. Install Terraform
+
+### 3. Infrastructure Provisioning Resources - Terraform
+This project uses Terraform to provision critical cloud infrastructure on the Google Cloud Platform, ensuring repeatable and version-controlled resource creation.
+
+Terraform is used to create:
+- A GCS bucket (data lake) for storing raw CSV files
+- Three BigQuery datasets representing the medallion architecture: raw_data (Bronze layer), staging_data (Silver layer), analytics_mart (Gold layer)
+
+📌 Step-by-Step Instructions to Reproduce Similar Resources
+1. Ensure terraform has been installed correctly you can check for it by inputting this in your terminal to return the version of terraform you're using ``` terraform --version ```
+2.  In your terminal, Create a new directory for Terraform and a folder called stats_canada_steup to nest our tf files for this project. Alternatively You can also clone this repository.
+     ```mkdir -p ~/terraform/stats_canada_setup ```
+3. Navigate into the terraform directory/folder  created ```cd  ~/terraform/stats_canada_setup```
+4. Create the following files inside the directory/folder, copy contents of the files in the repo :
+- main.tf: Define your GCS bucket and BigQuery datasets
+
+- variables.tf: Declare inputs like project ID, region, bucket name, etc.
+
+- terraform.tfvars: Store actual values (you will create this manually as it holds the name of the variables in my variable.tf file). Do not commit this file to GitHub—it contains project-specific values. I have attached mine but removed the values I kept, so you can use the template to recreate yours.
+Edit the variables.tf and terraform.tfvars to match your required region (Mine was north America-northeast1, similar to that of my VM), and also give your bucket and datasets the required name.
+
+5. Initialize Terraform ``` terraform init```  to get the cloud provider (in this instance, Google)
+6. Validate and preview the resources ``` terraform plan ```
+7. Apply the changes to create the infrastructure ``` terraform apply ```
+8. Confirm the following are created in your GCP project:
+  - A GCS bucket with versioning enabled
+  - BigQuery datasets: raw_data, staging_data, analytics_mart
+  
+### 4. Workflow Orchestration with Kestra, Docker, and DLT (Python)
+This section walks you through reproducing the orchestration pipeline powered by:   
+- Kestra	Workflow orchestration – Triggers ingestion 
+- Docker	Containerized Kestra and supporting services for easy setup and portability
+- DLT (Python)	Incremental ingestion from API data source to GCS and from GCS to  BigQuery
+
+⚠️ Note:  I created a Python virtual environment (venv) to isolate dependencies, especially for the ingestion scripts, ensuring compatibility across environments (VM, local machine, etc.); I installed all my Python packages and dependencies needed to build and run the ingestion scripts in this environment. However, creating a virtual environment is optional; you can proceed with the project without it. 
+
+📌 Step-by-Step Instructions to Set Up Orchestration Pipeline
+⚠️ If you’re not cloning the repository, you’ll need to manually create the project structure and upload the required files directly to your VM.
+
+1. Ensure docker has been installed; verify Docker is working: ``` docker --version```
+2. Create or upload the required Python scripts and docker compose yml files into your home directory( /home/ input your specific user account on the VM /) or into a folder ( you can create a Kestra folder just as we did in Terraform and access it using cd in the terminal). This is important to enable reference file paths to be used in the Kestra UI when setting up our ingestion flows (.yaml files)
+3. Start Kestra Using Docker from the same directory as docker-compose.yml run ``` docker compose up - d ```
+4. Ensure your port 8080 has been forwarded as seen below and open your browser to [http://localhost:8080](http://localhost:8080/)
+![Screenshot (67)](https://github.com/user-attachments/assets/57e6be3a-6124-48b7-9a26-4541b55377c8)
+5. Once the Kestra UI opens in your browser, create the data pipelines by copying/editing the contents of my flow YAML files, ensuring your topology looks like what we have below, and then  executing the flow to run.
+   - Pipeline 1 (load_stats_canada_data): This pipeline loads data from our API source to the GCS bucket; I have also included an incremental load to the script and a Slack notification to help notify when jobs are completed successfully or fail. Here's a link to setting up Slack notifications for Kestra [Kestra Slack](https://youtu.be/wIsbBpw3yCM?si=UhowuCBSUm8rh4x8)
+
+![Load To GCS Kestra Pipeline Flow](https://github.com/user-attachments/assets/b39a1dc4-6778-4edc-9e6a-ac4f92f9a7c2)
+
+   - Pipeline 2 (load_statistic_canada_to_raw): This pipeline loads data from our GCS bucket into Big Query
+     
+ ![Load to Big Query Kestra Pipeline Flow](https://github.com/user-attachments/assets/de817eed-a9c0-41f2-a77b-dfd607cdd4fb)
+
+7.
+⚠️ Note: I included triggers to run a cron job  to automate the pipelines and used KV store in Namespaces to store confidential credentials that are referenced in the flows; these videos will assist you in creating them and working with Kestra [Scheduling with Kestra](https://youtu.be/DoaZ5JWEkH0?si=uVw1GClALO39Ux28) [Setting up a pipeline in Kestra UI and using KV store for credentials](https://youtu.be/nKqjjLJ7YXs?si=Rm5g65nf3z9nv2BF)
+   
+### 5. Analytics Engineering - DBT 
+
+### 6. Data Visualization - Power BI
 
 ## Analytics Report/Dashboard 
 The interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/Report](https://app.powerbi.com/view?r=eyJrIjoiODdkYTFlMjEtYWFiMi00YzZlLWIyODEtYzlhYjk2OWQwZmIxIiwidCI6IjA2ZjNhOGJlLThkYWUtNGM5MS05Y2RhLTliZTM3ZjhmYTgyNiJ9), it presents insights across two key pages :
