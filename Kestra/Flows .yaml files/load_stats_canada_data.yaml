@@ -1,0 +1,39 @@
+id: load_stats_canada_data
+namespace: stats_canada
+description: |
+  Orchestrates the Statistic Canada Monthly Average Retail Price pipeline using DLT and uploads to GCS bucket with deduplication.
+
+triggers:
+  - id: monthly_trigger
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 9 8 * *"   # 9 AM UTC (Cordincated Universal Time) on the 8th of every month, since statistic canada release is not on a specidfic date of the month , they release the data for each month in the month after, usually few days into the new month e.g Feb data can be realesed on the 2nd of march.
+
+tasks:
+  - id: run_pipeline_script
+    type: io.kestra.core.tasks.scripts.Bash
+    description: Run the data ingestion script using venv
+    warningOnStdErr: false
+
+    env:
+     GOOGLE_APPLICATION_CREDENTIALS: "{{kv('gcp_credentials_path')}}" 
+    commands:
+      - echo "🚀 Running DLT script using venv interpreter..."
+      - /home/insert your home directory here/venv/bin/python "{{kv('gcp_bucket_python_script_path')}}"  # I created my script in my virtual enviornment , insert the path to which your script is stored either globally on the VM or in a virtuak environment
+
+  - id: notify_slack
+    type: io.kestra.plugin.notifications.slack.SlackIncomingWebhook
+    url: "insert your slack webhook here"
+    payload: |
+      {
+        "text": "✅ Monthly Retail Average Price Datalake Pipeline Completed Successfully at {{ execution.startDate }}"
+      }
+
+errors:
+  - id: notify_failure
+    type: io.kestra.plugin.notifications.slack.SlackIncomingWebhook
+    url: "insert your slack webhook here"
+    payload: |
+      {
+        "text": "🚨 Monthly Retail Average Price Datalake Pipeline FAILED at {{ execution.startDate }}.\nCheck logs: {{ execution.id }}"
+      }
+      
