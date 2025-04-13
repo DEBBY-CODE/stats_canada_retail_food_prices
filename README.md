@@ -247,13 +247,18 @@ DBT cloud was used for the data transformation stage in this project, refer to t
 4. Start building the dashboard; it's important to note that certain calculated fields, like the Average Price, have been created
 
 ## Analytics Report/Dashboard 
-The live interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/Report](https://app.powerbi.com/view?r=eyJrIjoiODdkYTFlMjEtYWFiMi00YzZlLWIyODEtYzlhYjk2OWQwZmIxIiwidCI6IjA2ZjNhOGJlLThkYWUtNGM5MS05Y2RhLTliZTM3ZjhmYTgyNiJ9), it presents insights across two key pages :
+The live interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/Report](https://app.powerbi.com/view?r=eyJrIjoiODdkYTFlMjEtYWFiMi00YzZlLWIyODEtYzlhYjk2OWQwZmIxIiwidCI6IjA2ZjNhOGJlLThkYWUtNGM5MS05Y2RhLTliZTM3ZjhmYTgyNiJ9), it presents insights across three key pages :
 1. National Overview
-![Screenshot (62)](https://github.com/user-attachments/assets/a715eaef-a950-41dc-9b15-d9393b78fd1f)
+
+![Screenshot (82)](https://github.com/user-attachments/assets/9314f909-78a9-43c7-b9af-c7cde6782201)
 
 2. Provincial
-   
-![Screenshot (63)](https://github.com/user-attachments/assets/484c2b0b-266c-41bd-a038-cbcb6b028364)
+3. 
+![Screenshot (81)](https://github.com/user-attachments/assets/b91706d2-df13-4aef-8b9a-b03e29748739)
+
+4. Month-on-Month Price Growth Tracker
+5. 
+![Screenshot (80)](https://github.com/user-attachments/assets/050a3bcc-556b-4e48-aa66-47e7dce2cf58)
 
 ## Contact 
 Have questions or feedback? Let’s connect!
