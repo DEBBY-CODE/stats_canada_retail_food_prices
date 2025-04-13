@@ -158,14 +158,14 @@ This section walks you through reproducing the orchestration pipeline powered by
 ⚠️ Note:  I created a Python virtual environment (venv) to isolate dependencies, especially for the ingestion scripts, ensuring compatibility across environments (VM, local machine, etc.); I installed all my Python packages and dependencies needed to build and run the ingestion scripts in this environment. However, creating a virtual environment is optional; you can proceed with the project without it. 
 
 📌 Step-by-Step Instructions to Set Up Orchestration Pipeline
-⚠️ If you’re not cloning the repository, you’ll need to manually create the project structure and upload the required files directly to your VM.
+⚠️ If you’re not cloning the repository, you need to manually create the project structure and upload the required files directly to your VM.
 
 1. Ensure docker has been installed; verify Docker is working: ``` docker --version```
-2. Create or upload the required Python scripts and docker compose yml files into your home directory( /home/ input your specific user account on the VM /) or into a folder ( you can create a Kestra folder just as we did in Terraform and access it using cd in the terminal). This is important to enable reference file paths to be used in the Kestra UI when setting up our ingestion flows (.yaml files)
+2. Create or upload the required Python scripts and docker compose yml files into your home directory( /home/ input your specific user account on the VM / ) . This is important to enable reference file paths to be used in the Kestra UI when setting up our ingestion flows (.yaml files)
 3. Start Kestra Using Docker from the same directory as docker-compose.yml run ``` docker compose up - d ```
 4. Ensure your port 8080 has been forwarded as seen below and open your browser to [http://localhost:8080](http://localhost:8080/)
 ![Screenshot (67)](https://github.com/user-attachments/assets/57e6be3a-6124-48b7-9a26-4541b55377c8)
-5. Once the Kestra UI opens in your browser, create the data pipelines by copying/editing the contents of my flow YAML files, ensuring your topology looks like what we have below, and then  executing the flow to run.
+5. Once the Kestra UI opens in your browser, create the data pipelines by copying/editing the contents of my flow YAML files, ensuring your topology looks like the one below
    - Pipeline 1 (load_stats_canada_data): This pipeline loads data from our API source to the GCS bucket; I have also included an incremental load to the script and a Slack notification to help notify when jobs are completed successfully or fail. Here's a link to setting up Slack notifications for Kestra [Kestra Slack](https://youtu.be/wIsbBpw3yCM?si=UhowuCBSUm8rh4x8)
 
 ![Load To GCS Kestra Pipeline Flow](https://github.com/user-attachments/assets/b39a1dc4-6778-4edc-9e6a-ac4f92f9a7c2)
@@ -174,11 +174,24 @@ This section walks you through reproducing the orchestration pipeline powered by
      
  ![Load to Big Query Kestra Pipeline Flow](https://github.com/user-attachments/assets/de817eed-a9c0-41f2-a77b-dfd607cdd4fb)
 
-7.
-⚠️ Note: I included triggers to run a cron job  to automate the pipelines and used KV store in Namespaces to store confidential credentials that are referenced in the flows; these videos will assist you in creating them and working with Kestra [Scheduling with Kestra](https://youtu.be/DoaZ5JWEkH0?si=uVw1GClALO39Ux28) [Setting up a pipeline in Kestra UI and using KV store for credentials](https://youtu.be/nKqjjLJ7YXs?si=Rm5g65nf3z9nv2BF)
-   
-### 5. Analytics Engineering - DBT 
+6.⚠️ Note: I included triggers to run a cron job  to automate the pipelines and used KV store in Namespaces to store confidential credentials that are referenced in the flows; these videos will assist you in creating them and working with Kestra [Scheduling with Kestra](https://youtu.be/DoaZ5JWEkH0?si=uVw1GClALO39Ux28) [Setting up a pipeline in Kestra UI and using KV store for credentials](https://youtu.be/nKqjjLJ7YXs?si=Rm5g65nf3z9nv2BF)
 
+7. Once Flows are created, execute them to run, if successful you should see the below and receive a Slack notification for the upload to GCS:
+   ![Screenshot (69)](https://github.com/user-attachments/assets/91f198ef-33c6-4e97-967b-ccb0be98f22a)
+
+   
+### 5. Data Transformation with DBT 
+DBT cloud was used for the data transformation stage in this project, refer to the DBT videos in the DataTalksClub DE Zoomcamp playlist to learn how to use DBT and deploy data models to production [DBT Video Tutorial](https://www.youtube.com/watch?v=gsKuETFJr54&list=PLaNLNpjZpzwgneiI-Gl8df8GCsPYp_6Bs&index=6)
+
+📌  Step-by-Step Instructions to  Set Up DBT Cloud
+1. Create a free account if you haven't already done that in the prerequisite section.
+2. Create a DBT Project
+   - Select Big Query as your datawarehouse for your development connection
+   -  Use the same service account credentials used for Python and Kestra.  DBT Cloud will request your project ID and dataset location (e.g., US or EU) and the service account JSON key. For the location input the region you used  to create your GCP resources, e.g. northamerica-northeast1
+   -   Connect Your GitHub Repo (Optional if you're using version control); I recommend connecting your github repo to enable the development and deployment of models using branches and pull requests to the main branch.
+   -   Watch this video on a guide to creating a DBT Project [DBT Project Setup Guide] ](https://youtu.be/J0XCDyKiU64?si=0o9P9nssRZNTtuou)
+3. Recreate the dbt files structure in this repo, you can also watch these videos to guide you on developing dbt models and deployment[Creating DBT Models](https://youtu.be/ueVy2N54lyc?si=YxMCjwb2JTMr1CAZ)
+4. Deploy dbt models [Deploy DBT Models to Prod](https://youtu.be/V2m5C0n8Gro?si=XKD5Mi4GUskW3Reh)
 ### 6. Data Visualization - Power BI
 
 ## Analytics Report/Dashboard 
