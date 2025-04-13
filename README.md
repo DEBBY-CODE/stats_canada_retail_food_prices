@@ -1,6 +1,13 @@
 # Project: Statistic Canada - Monthly Average Retail Food Prices 
 
 ## Quick Navigation
+- [Overview](#Overview)
+- [Project Goals](#Project-Goals)
+- [Architecture](#Architecture)
+- [Data Source](#Data-Source)
+- [Technology Stack](#Technology-Stack)
+- [Reproducing the Project](#Reproducing-the-Project (Detailed Section))
+- [Analytics Report/Dashboard](#Analytics-Report/Dashboard)
 
 ## Overview
 ### 
@@ -24,6 +31,11 @@ Develop and build an analytical dashboard  with at least two tiles by the below 
 - Transform & Model the data in the data warehouse: prepare it for the dashboard
 - Buildia dashboard to visualize the data
 ## Architecture 
+
+
+![DA](https://github.com/user-attachments/assets/9d228666-c0c0-4ff9-bd1d-f1a64b37bf4b)
+
+
 The data architecture, as seen in the image above, reflects a complete end-to-end pipeline that enables automated ingestion, transformation, and visualization of Statistics Canada data. It consists of the following components:
 
 - Data Ingestion: Source data are uploaded to Google Cloud Storage (GCS), serving as the data lake.
@@ -33,6 +45,7 @@ The data architecture, as seen in the image above, reflects a complete end-to-en
 - Data Transformation: DBT Cloud is used to clean, enrich, and model the data using a modular, layered approach.
 
 - Data Visualization: The final DBT models (gold data tables) are visualized in Power BI, providing insights into national and regional food price trends for our project.
+  
 ## Data Source
 The data source can be viewed here [Statistic Canada Monthly Average Retail Prices](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810024501). To reproduce the project, leverage the API resource by accessing it via [Statistic Canada Web Data Service](https://www.statcan.gc.ca/en/developers/wds/user-guide#a12-6), use the getFullTableDownloadCSV option for the API URL section in the ingestion script.
 
@@ -72,7 +85,7 @@ The key fields we'll be working within DBT will be ref_date, geo, products, uom 
 
 - Power BI: Data visualization
   
-## How to Reproduce the Project (Detailed Section)
+## Reproducing the Project (Detailed Section)
 This section provides a step-by-step guide to replicating the entire pipeline, from infrastructure provisioning to dashboard development.
 
 As seen in section 2, this project uses a Compute Engine VM instance to run the ingestion and orchestration components. However, you can also run everything locally if preferred.
@@ -166,11 +179,12 @@ This section walks you through reproducing the orchestration pipeline powered by
 4. Ensure your port 8080 has been forwarded as seen below and open your browser to [http://localhost:8080](http://localhost:8080/)
 ![Screenshot (67)](https://github.com/user-attachments/assets/57e6be3a-6124-48b7-9a26-4541b55377c8)
 5. Once the Kestra UI opens in your browser, create the data pipelines by copying/editing the contents of my flow YAML files, ensuring your topology looks like the one below
-   - Pipeline 1 (load_stats_canada_data): This pipeline loads data from our API source to the GCS bucket; I have also included an incremental load to the script and a Slack notification to help notify when jobs are completed successfully or fail. Here's a link to setting up Slack notifications for Kestra [Kestra Slack](https://youtu.be/wIsbBpw3yCM?si=UhowuCBSUm8rh4x8)
+   
+    - Pipeline 1 (load_stats_canada_data): This pipeline loads data from our API source to the GCS bucket; I have also included an incremental load to the script and a Slack notification to help notify when jobs are completed successfully or fail. Here's a link to setting up Slack notifications for Kestra [Kestra Slack](https://youtu.be/wIsbBpw3yCM?si=UhowuCBSUm8rh4x8)
 
 ![Load To GCS Kestra Pipeline Flow](https://github.com/user-attachments/assets/b39a1dc4-6778-4edc-9e6a-ac4f92f9a7c2)
 
-   - Pipeline 2 (load_statistic_canada_to_raw): This pipeline loads data from our GCS bucket into Big Query
+  - Pipeline 2 (load_statistic_canada_to_raw): This pipeline loads data from our GCS bucket into Big Query
      
  ![Load to Big Query Kestra Pipeline Flow](https://github.com/user-attachments/assets/de817eed-a9c0-41f2-a77b-dfd607cdd4fb)
 
@@ -184,18 +198,42 @@ This section walks you through reproducing the orchestration pipeline powered by
 DBT cloud was used for the data transformation stage in this project, refer to the DBT videos in the DataTalksClub DE Zoomcamp playlist to learn how to use DBT and deploy data models to production [DBT Video Tutorial](https://www.youtube.com/watch?v=gsKuETFJr54&list=PLaNLNpjZpzwgneiI-Gl8df8GCsPYp_6Bs&index=6)
 
 📌  Step-by-Step Instructions to  Set Up DBT Cloud
-1. Create a free account if you haven't already done that in the prerequisite section.
+1. Create a free account if you haven't already.
 2. Create a DBT Project
    - Select Big Query as your datawarehouse for your development connection
    -  Use the same service account credentials used for Python and Kestra.  DBT Cloud will request your project ID and dataset location (e.g., US or EU) and the service account JSON key. For the location input the region you used  to create your GCP resources, e.g. northamerica-northeast1
    -   Connect Your GitHub Repo (Optional if you're using version control); I recommend connecting your github repo to enable the development and deployment of models using branches and pull requests to the main branch.
+   -   Add the dbt folder as a project subdirectory
    -   Watch this video on a guide to creating a DBT Project [DBT Project Setup Guide] ](https://youtu.be/J0XCDyKiU64?si=0o9P9nssRZNTtuou)
-3. Recreate the dbt files structure in this repo, you can also watch these videos to guide you on developing dbt models and deployment[Creating DBT Models](https://youtu.be/ueVy2N54lyc?si=YxMCjwb2JTMr1CAZ)
-4. Deploy dbt models [Deploy DBT Models to Prod](https://youtu.be/V2m5C0n8Gro?si=XKD5Mi4GUskW3Reh)
+3. Recreate the dbt files structure and content in the DBT folder of this repo, you can also watch these videos to guide you on developing dbt models and deployment[Creating DBT Models](https://youtu.be/ueVy2N54lyc?si=YxMCjwb2JTMr1CAZ)
+   - Your DBT file structure should look like the below:
+     ![Screenshot (73)](https://github.com/user-attachments/assets/2d7c8138-7d9e-4c47-83f1-701898aa8f94)
+
+4. Once you've created and saved the models, compile and build them using dbt run and dbt build. You can test with your dev environment, and once you're sure everything works, commit and push the request to your main github branch. That way, when DBT prod JOBS are run, the correct data model goes into your production tables.
+   - Your DAG should look like the below:
+  ![Screenshot (74)](https://github.com/user-attachments/assets/148bd753-0b75-4f62-b4fa-be9093c8e9e3)
+
+ - A successful build shows green, but to confirm that your data models are present, check your big query dataset, and you should have the below for both dev(testing phase) and prod
+![Screenshot (77)](https://github.com/user-attachments/assets/e9d4eb12-e722-404d-b73c-a3bb5d0be9ff)
+
+- Note that I created DBT Macros (clean_utils) for some transformations,  added a seed file called product_categories, and ensured the data models are incremental tables.
+
+  
+6. Navigate to the Deploy code section in dbt cloud , create a production environment  and set a schedule JOB to automate the refresh of data models [Deploy DBT Models to Prod](https://youtu.be/V2m5C0n8Gro?si=XKD5Mi4GUskW3Reh)
+  
+   - To test the production job , manually trigger the job and you should have the following :
+     ![Screenshot (78)](https://github.com/user-attachments/assets/cf934731-a811-4a16-9012-e4c580324529)
+   
 ### 6. Data Visualization - Power BI
 
+1. Download/Install Power BI desktop
+2. Create a connection to your Google Cloud account to access the datasets in big query, to do this In the get data section in powerbi search for  Google Big Query.
+3. Model the fact and dimenion tables in the model view as seen below:
+![Screenshot (75)](https://github.com/user-attachments/assets/5f186415-05cb-4a0f-862c-bab0d5eb57d1)
+4. Start building the dashboard; it's important to note that certain calculated fields, like the Average Price, have been created
+   
 ## Analytics Report/Dashboard 
-The interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/Report](https://app.powerbi.com/view?r=eyJrIjoiODdkYTFlMjEtYWFiMi00YzZlLWIyODEtYzlhYjk2OWQwZmIxIiwidCI6IjA2ZjNhOGJlLThkYWUtNGM5MS05Y2RhLTliZTM3ZjhmYTgyNiJ9), it presents insights across two key pages :
+The live interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/Report](https://app.powerbi.com/view?r=eyJrIjoiODdkYTFlMjEtYWFiMi00YzZlLWIyODEtYzlhYjk2OWQwZmIxIiwidCI6IjA2ZjNhOGJlLThkYWUtNGM5MS05Y2RhLTliZTM3ZjhmYTgyNiJ9), it presents insights across two key pages :
 1. National Overview
 ![Screenshot (62)](https://github.com/user-attachments/assets/a715eaef-a950-41dc-9b15-d9393b78fd1f)
 
