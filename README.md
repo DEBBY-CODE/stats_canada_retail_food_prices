@@ -227,6 +227,8 @@ DBT cloud was used for the data transformation stage in this project, refer to t
    - Your DAG should look like the below:
   ![Screenshot (74)](https://github.com/user-attachments/assets/148bd753-0b75-4f62-b4fa-be9093c8e9e3)
 
+⚠️ Note: I created a seed file, which is gotten from the list of products in my table. I created a  CSV file from this list, and you can access it in the supplementary data folder.
+
  - A successful build shows green, but to confirm that your data models are present, check your big query dataset, and you should have the below for both dev(testing phase) and prod
 ![Screenshot (77)](https://github.com/user-attachments/assets/e9d4eb12-e722-404d-b73c-a3bb5d0be9ff)
 
