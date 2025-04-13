@@ -44,6 +44,7 @@ models:
 seeds:
   stats_canada_avg_retail_food_prices:
     +schema: silver_stats_canada
+    
 
 
     
