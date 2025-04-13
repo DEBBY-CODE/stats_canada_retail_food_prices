@@ -178,18 +178,8 @@ cython_debug/
 
 # DBT Cloud/CLI artifacts
 dbt_modules/
-dbt_packages/
-target/
 dbt_logs/
 
-
-
-# Default .gitignore content added by dbt Cloud# you shouldn't commit these into source control
-# these are the default directory names, adjust/add to fit your needs
-target/
-dbt_packages/
-logs/
-# end dbt Cloud content
 
 
 # Terraform directories and caches
@@ -226,9 +216,8 @@ dbt_packages/
 logs/
 # end dbt Cloud content
 
-# Default .gitignore content added by dbt Cloud# you shouldn't commit these into source control
-# these are the default directory names, adjust/add to fit your needs
-target/
-dbt_packages/
-logs/
-# end dbt Cloud content
+# Ignore DBT artifacts in dbt/ folder
+dbt/target/
+dbt/dbt_modules/
+dbt/dbt_packages/
+dbt/logs/
