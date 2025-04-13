@@ -6,8 +6,8 @@
 - [Architecture](#Architecture)
 - [Data Source](#Data-Source)
 - [Technology Stack](#Technology-Stack)
-- [Reproducing the Project](#Reproducing-the-Project (Detailed Section))
-- [Analytics Report/Dashboard](#Analytics-Report/Dashboard)
+- [Reproducing the Project](#Reproducing-the-Project-Detailed-Section) 
+- [Analytics Report/Dashboard](#Analytics-ReportDashboard) 
 ## Overview
 ### 
 Food and household essential product prices are among the most universally impactful economic indicators—they affect individuals, families, communities, and entire nations. Whether you're a policymaker setting inflation targets, a retailer managing inventory, or a consumer budgeting for groceries, understanding food price trends is essential for making informed decisions.
