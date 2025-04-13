@@ -52,7 +52,7 @@ The data architecture, as seen in the image above, reflects a complete end-to-en
 
 - Data Ingestion: Source data are uploaded to Google Cloud Storage (GCS), serving as the data lake.
 
-- Data Loading & Staging: Following the medallion architecture structure, files are incrementally loaded into BigQuery, starting with the bronze layer, which captures the untransformed original data from our data source, then progressing through the silver layer, which holds the clean and standardized tables, and lastly the gold layer, in which the final analytics models reside, These include fact and dimension tables used for reporting and dashboarding.
+- Data Loading & Staging: Following the medallion architecture structure, files are incrementally batch loaded into BigQuery, starting with the bronze layer, which captures the untransformed original data from our data source, then progressing through the silver layer, which holds the clean and standardized tables, and lastly the gold layer, in which the final analytics models reside, These include fact and dimension tables used for reporting and dashboarding.
 
 - Data Transformation: DBT Cloud cleans, enriches, and models the data using a modular, layered approach.
 
