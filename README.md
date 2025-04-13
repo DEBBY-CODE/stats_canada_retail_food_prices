@@ -184,18 +184,42 @@ This section walks you through reproducing the orchestration pipeline powered by
 DBT cloud was used for the data transformation stage in this project, refer to the DBT videos in the DataTalksClub DE Zoomcamp playlist to learn how to use DBT and deploy data models to production [DBT Video Tutorial](https://www.youtube.com/watch?v=gsKuETFJr54&list=PLaNLNpjZpzwgneiI-Gl8df8GCsPYp_6Bs&index=6)
 
 📌  Step-by-Step Instructions to  Set Up DBT Cloud
-1. Create a free account if you haven't already done that in the prerequisite section.
+1. Create a free account if you haven't already.
 2. Create a DBT Project
    - Select Big Query as your datawarehouse for your development connection
    -  Use the same service account credentials used for Python and Kestra.  DBT Cloud will request your project ID and dataset location (e.g., US or EU) and the service account JSON key. For the location input the region you used  to create your GCP resources, e.g. northamerica-northeast1
    -   Connect Your GitHub Repo (Optional if you're using version control); I recommend connecting your github repo to enable the development and deployment of models using branches and pull requests to the main branch.
+   -   Add the dbt folder as a project subdirectory
    -   Watch this video on a guide to creating a DBT Project [DBT Project Setup Guide] ](https://youtu.be/J0XCDyKiU64?si=0o9P9nssRZNTtuou)
-3. Recreate the dbt files structure in this repo, you can also watch these videos to guide you on developing dbt models and deployment[Creating DBT Models](https://youtu.be/ueVy2N54lyc?si=YxMCjwb2JTMr1CAZ)
-4. Deploy dbt models [Deploy DBT Models to Prod](https://youtu.be/V2m5C0n8Gro?si=XKD5Mi4GUskW3Reh)
+3. Recreate the dbt files structure and content in the DBT folder of this repo, you can also watch these videos to guide you on developing dbt models and deployment[Creating DBT Models](https://youtu.be/ueVy2N54lyc?si=YxMCjwb2JTMr1CAZ)
+   - Your DBT file structure should look like the below:
+     ![Screenshot (73)](https://github.com/user-attachments/assets/2d7c8138-7d9e-4c47-83f1-701898aa8f94)
+
+4. Once you've created and saved the models, compile and build them using dbt run and dbt build. You can test with your dev environment, and once you're sure everything works, commit and push the request to your main github branch. That way, when DBT prod JOBS are run, the correct data model goes into your production tables.
+   - Your DAG should look like the below:
+  ![Screenshot (74)](https://github.com/user-attachments/assets/148bd753-0b75-4f62-b4fa-be9093c8e9e3)
+
+ - A successful build shows green, but to confirm that your data models are present, check your big query dataset, and you should have the below for both dev(testing phase) and prod
+![Screenshot (77)](https://github.com/user-attachments/assets/e9d4eb12-e722-404d-b73c-a3bb5d0be9ff)
+
+- Note that I created DBT Macros (clean_utils) for some transformations,  added a seed file called product_categories, and ensured the data models are incremental tables.
+
+  
+6. Navigate to the Deploy code section in dbt cloud , create a production environment  and set a schedule JOB to automate the refresh of data models [Deploy DBT Models to Prod](https://youtu.be/V2m5C0n8Gro?si=XKD5Mi4GUskW3Reh)
+  
+   - To test the production job , manually trigger the job and you should have the following :
+     ![Screenshot (78)](https://github.com/user-attachments/assets/cf934731-a811-4a16-9012-e4c580324529)
+   
 ### 6. Data Visualization - Power BI
 
+1. Download/Install Power BI desktop
+2. Create a connection to your Google Cloud account to access the datasets in big query, to do this In the get data section in powerbi search for  Google Big Query.
+3. Model the fact and dimenion tables in the model view as seen below:
+![Screenshot (75)](https://github.com/user-attachments/assets/5f186415-05cb-4a0f-862c-bab0d5eb57d1)
+4. Start building the dashboard; it's important to note that certain calculated fields, like the Average Price, have been created
+
 ## Analytics Report/Dashboard 
-The interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/Report](https://app.powerbi.com/view?r=eyJrIjoiODdkYTFlMjEtYWFiMi00YzZlLWIyODEtYzlhYjk2OWQwZmIxIiwidCI6IjA2ZjNhOGJlLThkYWUtNGM5MS05Y2RhLTliZTM3ZjhmYTgyNiJ9), it presents insights across two key pages :
+The live interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/Report](https://app.powerbi.com/view?r=eyJrIjoiODdkYTFlMjEtYWFiMi00YzZlLWIyODEtYzlhYjk2OWQwZmIxIiwidCI6IjA2ZjNhOGJlLThkYWUtNGM5MS05Y2RhLTliZTM3ZjhmYTgyNiJ9), it presents insights across two key pages :
 1. National Overview
 ![Screenshot (62)](https://github.com/user-attachments/assets/a715eaef-a950-41dc-9b15-d9393b78fd1f)
 
@@ -203,7 +227,7 @@ The interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/R
    
 ![Screenshot (63)](https://github.com/user-attachments/assets/484c2b0b-266c-41bd-a038-cbcb6b028364)
 
-3. National vs Provincial Price Tracker as seen in the interactive dashboard
 ## Contact 
 Have questions or feedback? Let’s connect!
 [💼 LinkedIn – Deborah Alenkhe](https://www.linkedin.com/public-profile/settings?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact-info%3Bv%2Bca91M6Tn2ZgulfjUpxXA%3D%3D)
+
