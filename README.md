@@ -1,16 +1,22 @@
 # Project: Statistic Canada - Monthly Average Retail Food & Product Prices 
 
 ## Quick Navigation
-
+- [Overview](#Overview)
+- [Project Goals](#Project-Goals)
+- [Architecture](#Architecture)
+- [Data Source](#Data-Source)
+- [Technology Stack](#Technology-Stack)
+- [Reproducing the Project](#Reproducing-the-Project (Detailed Section))
+- [Analytics Report/Dashboard](#Analytics-Report/Dashboard)
 ## Overview
 ### 
-Food and household essential prices are one of the most universally impactful economic indicators — they affect individuals, families, communities, and entire nations. Whether you're a policymaker setting inflation targets, a retailer managing inventory, or a consumer budgeting for groceries, understanding food price trends is essential for making informed decisions.
+Food and household essential product prices are among the most universally impactful economic indicators—they affect individuals, families, communities, and entire nations. Whether you're a policymaker setting inflation targets, a retailer managing inventory, or a consumer budgeting for groceries, understanding food price trends is essential for making informed decisions.
 
-In recent years, global food markets have experienced significant volatility due to inflation, climate change, geopolitical events, and supply chain disruptions. These changes ripple into household budgets, nutritional access, and even political stability. In Canada, like in many other nations, tracking food price fluctuations helps:
+In recent years, global food markets have experienced significant volatility due to inflation, climate change, geopolitical events, and supply chain disruptions. These changes ripple into household budgets, nutritional access, and political stability. In Canada, like in many other nations, tracking food price fluctuations helps:
 
 - Households plan spending, savings, and consumption habits.
 
-- Governments assess cost of living and adjust support programs.
+- Governments assess the cost of living and adjust support programs.
 
 - Retailers and manufacturers forecast demand, plan pricing, and manage inventory.
 
@@ -18,7 +24,7 @@ In recent years, global food markets have experienced significant volatility due
 
 In short, food prices are a daily reality and an economic signal.
 
-This project analyzes Canada's average retail food prices by building an automated data pipeline that ingests public data, transforms it into clean analytical models, and visualizes key trends —helping stakeholders understand what’s changing, why it matters, and who it impacts.
+This project analyzes Canada's average retail food and product prices by building an automated data pipeline that ingests public data, transforms it into clean analytical models, and visualizes key trends. This helps stakeholders understand what’s changing, why it matters, and who it impacts.
 
 It answers key analytical questions such as:
 
@@ -37,38 +43,43 @@ Develop and build an analytical dashboard  with at least two tiles by the below 
 - Create a batch pipeline for processing this dataset and putting it into a datalake 
 - Create a batch pipeline for moving the data from the lake to a data warehouse
 - Transform & Model the data in the data warehouse: prepare it for the dashboard
-- Buildia dashboard to visualize the data
+- Build a dashboard to visualize the data
+  
 ## Architecture 
+
+![DA](https://github.com/user-attachments/assets/9d228666-c0c0-4ff9-bd1d-f1a64b37bf4b)
 The data architecture, as seen in the image above, reflects a complete end-to-end pipeline that enables automated ingestion, transformation, and visualization of Statistics Canada data. It consists of the following components:
 
 - Data Ingestion: Source data are uploaded to Google Cloud Storage (GCS), serving as the data lake.
 
 - Data Loading & Staging: Following the medallion architecture structure, files are incrementally loaded into BigQuery, starting with the bronze layer, which captures the untransformed original data from our data source, then progressing through the silver layer, which holds the clean and standardized tables, and lastly the gold layer, in which the final analytics models reside, These include fact and dimension tables used for reporting and dashboarding.
 
-- Data Transformation: DBT Cloud is used to clean, enrich, and model the data using a modular, layered approach.
+- Data Transformation: DBT Cloud cleans, enriches, and models the data using a modular, layered approach.
 
 - Data Visualization: The final DBT models (gold data tables) are visualized in Power BI, providing insights into national and regional food price trends for our project.
+  
 ## Data Source
 The data source can be viewed here [Statistic Canada Monthly Average Retail Prices](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810024501). To reproduce the project, leverage the API resource by accessing it via [Statistic Canada Web Data Service](https://www.statcan.gc.ca/en/developers/wds/user-guide#a12-6), use the getFullTableDownloadCSV option for the API URL section in the ingestion script.
 
-Below are the data fields/columns  from the source:
+Below are the key data fields/columns from the source:
 - REF_DATE: Reference Period of the month data was uploaded for, usually the first day of the month as uploaded monthly e.g 2017-01-01 or 2025-02-01
 -	GEO: Geography or region, e.g. Canada and its provinces e.g Alberta, Ontario, Quebec etc.
--	DGUID: Not crucial for analysis
 -	Products: Products such as food items and other essentials
 -	UOM: Unit of Measure, usually in dollars
--	UOM_ID: Not crucial for analysis
--	SCALAR_FACTOR: Not crucial for analysis
--	SCALAR_ID: Not crucial for analysis
--	VECTOR: Not crucial for analysis
--	COORDINATE: Not crucial for analysis
 -	VALUE: Average Price per product
--	STATUS: Not crucial for analysis
--	SYMBOL: Not crucial for analysis
--	TERMINATED: Not crucial for analysis
--	DECIMALS: Not crucial for analysis
 
-The key fields we'll be working within DBT will be ref_date, geo, products, uom and value
+The rest below are not crucial for our analysis
+-	DGUID
+-	UOM_ID
+-	SCALAR_FACTOR
+-	SCALAR_ID
+-	VECTOR
+-	COORDINATE
+-	STATUS
+-	SYMBOL
+-	TERMINATED
+-	DECIMALS
+
 
 ## Technology Stack
 - Google Cloud Storage (GCS): Object storage for source data, e.g. our CSV files extracted from our Stats Canada API
@@ -79,15 +90,17 @@ The key fields we'll be working within DBT will be ref_date, geo, products, uom 
 
 - Docker: Containerization for running services like Kestra
 
-- Python: Used in scripts to support ingestion, backfilling, and incremental data loads
+- Python & DLT Package: Used in scripts to support ingestion and incremental data loads
 
 - Kestra: Workflow orchestration (GCS → BigQuery etc.)
+  
+- Slack: To get success or failure notifications of our pipeline jobs in Kestra
 
 - DBT Cloud: Data transformation & modeling
 
 - Power BI: Data visualization
   
-## How to Reproduce the Project (Detailed Section)
+## Reproducing the Project (Detailed Section)
 This section provides a step-by-step guide to replicating the entire pipeline, from infrastructure provisioning to dashboard development.
 
 As seen in section 2, this project uses a Compute Engine VM instance to run the ingestion and orchestration components. However, you can also run everything locally if preferred.
