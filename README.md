@@ -1,11 +1,25 @@
-# Project: Statistic Canada - Monthly Average Retail Food Prices 
+# Project: Statistic Canada - Monthly Average Retail Food & Product Prices 
 
 ## Quick Navigation
 
 ## Overview
 ### 
-This project focuses on building a modern data pipeline to process and analyze the Average Retail Food Prices in Canada, published monthly by Statistics Canada.
-The pipeline enables end-to-end automation from raw data ingestion to analytical reporting, offering insights into national and regional food pricing trends.
+Food and household essential prices are one of the most universally impactful economic indicators — they affect individuals, families, communities, and entire nations. Whether you're a policymaker setting inflation targets, a retailer managing inventory, or a consumer budgeting for groceries, understanding food price trends is essential for making informed decisions.
+
+In recent years, global food markets have experienced significant volatility due to inflation, climate change, geopolitical events, and supply chain disruptions. These changes ripple into household budgets, nutritional access, and even political stability. In Canada, like in many other nations, tracking food price fluctuations helps:
+
+- Households plan spending, savings, and consumption habits.
+
+- Governments assess cost of living and adjust support programs.
+
+- Retailers and manufacturers forecast demand, plan pricing, and manage inventory.
+
+- Researchers and economists analyze inflation, economic inequality, and long-term trends.
+
+In short, food prices are a daily reality and an economic signal.
+
+This project analyzes Canada's average retail food prices by building an automated data pipeline that ingests public data, transforms it into clean analytical models, and visualizes key trends —helping stakeholders understand what’s changing, why it matters, and who it impacts.
+
 It answers key analytical questions such as:
 
 - How have food prices changed in Canada and across provinces over time?
@@ -16,6 +30,7 @@ It answers key analytical questions such as:
 
 The project follows the modern data stack: extracting raw data from cloud storage, transforming it with DBT, and visualizing it using a BI tool, e.g. Power BI.
 This was created as part of the DataTalksClub Data Engineering Certification requirements, demonstrating cloud infrastructure integration, data modeling, and business intelligence.
+
 ## Project Goals
 Develop and build an analytical dashboard  with at least two tiles by the below deliverables:
 - Select a dataset of interest (see Data Source Section)
