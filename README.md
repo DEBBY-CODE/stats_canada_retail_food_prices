@@ -1,4 +1,4 @@
-# Project: Statistic Canada - Monthly Average Retail Food & Product Prices 
+# Project: Statistic Canada - Monthly Average Retail Products Prices 
 
 ## Quick Navigation
 - [Overview](#Overview)
