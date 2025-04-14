@@ -62,6 +62,7 @@ The data architecture, as seen in the image above, reflects a complete end-to-en
 The data source can be viewed here: [Statistic Canada Monthly Average Retail Prices](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810024501). To reproduce the project, leverage the API resource by accessing it via [Statistic Canada Web Data Service](https://www.statcan.gc.ca/en/developers/wds/user-guide#a12-6). Use the getFullTableDownloadCSV option for the API URL section in the ingestion script.
 
 📌Below are the key data fields/columns from the source:
+
 - REF_DATE: Reference Period of the month data was uploaded for, usually the first day of the month as uploaded monthly e.g 2017-01-01 or 2025-02-01
 -	GEO: Geography or region, e.g. Canada and its provinces e.g Alberta, Ontario, Quebec etc.
 -	Products: Products such as food items and other essentials
@@ -158,6 +159,7 @@ Terraform is used to create:
 - Three BigQuery datasets representing the medallion architecture: raw_data (Bronze layer), staging_data (Silver layer), analytics_mart (Gold layer)
 
 📌 Step-by-Step Instructions to Reproduce Similar Resources
+
 1. Ensure terraform has been installed correctly; you can check for it by inputting this in your terminal to return the version of terraform you're using ``` terraform --version ```
 2.  In your terminal, Create a new directory for Terraform and a folder called stats_canada_steup to nest our tf files for this project. Alternatively, you can clone this repository if you don't mind.
      ```mkdir -p ~/terraform/stats_canada_setup ```
@@ -186,6 +188,7 @@ This section walks you through reproducing the orchestration pipeline powered by
 ⚠️ Note:  I created a Python virtual environment (venv) to isolate dependencies, especially for the ingestion scripts, ensuring compatibility across environments (VM, local machine, etc.); I installed all my Python packages and dependencies needed to build and run the ingestion scripts in this environment. However, creating a virtual environment is optional; you can proceed with the project without it. 
 
 📌 Step-by-Step Instructions to Set Up Orchestration Pipeline
+
 ⚠️ If you’re not cloning the repository, manually create the project structure and upload the required files directly to your VM.
 
 1. Ensure docker has been installed; verify Docker is working: ``` docker --version```
@@ -202,16 +205,16 @@ This section walks you through reproducing the orchestration pipeline powered by
      
  ![Load to Big Query Kestra Pipeline Flow](https://github.com/user-attachments/assets/de817eed-a9c0-41f2-a77b-dfd607cdd4fb)
 
-6.⚠️ Note: I included triggers to run a monthly cron job  to automate the pipelines and used KV store in Namespaces to store confidential credentials that are referenced in the flows; these videos will assist you in creating them and working with Kestra [Scheduling with Kestra](https://youtu.be/DoaZ5JWEkH0?si=uVw1GClALO39Ux28) [Setting up a pipeline in Kestra UI and using KV store for credentials](https://youtu.be/nKqjjLJ7YXs?si=Rm5g65nf3z9nv2BF)
-
-7. Once Flows are created, execute them to run, if successful you should see the below and receive a Slack notification for the upload to GCS:
+6. Once Flows are created, execute them to run, if successful you should see the below and receive a Slack notification for the upload to GCS:
    ![Screenshot (69)](https://github.com/user-attachments/assets/91f198ef-33c6-4e97-967b-ccb0be98f22a)
 
-   
+⚠️ Note: I included triggers to run a monthly cron job  to automate the pipelines and used KV store in Namespaces to store confidential credentials that are referenced in the flows; these videos will assist you in creating them and working with Kestra [Scheduling with Kestra](https://youtu.be/DoaZ5JWEkH0?si=uVw1GClALO39Ux28) [Setting up a pipeline in Kestra UI and using KV store for credentials](https://youtu.be/nKqjjLJ7YXs?si=Rm5g65nf3z9nv2BF)
+
 ### 5. Data Transformation with DBT 
 DBT cloud was used for the data transformation stage in this project, refer to the DBT videos in the DataTalksClub DE Zoomcamp playlist to learn how to use DBT and deploy data models to production [DBT Video Tutorial](https://www.youtube.com/watch?v=gsKuETFJr54&list=PLaNLNpjZpzwgneiI-Gl8df8GCsPYp_6Bs&index=6)
 
 📌  Step-by-Step Instructions to  Set Up DBT Cloud
+
 1. Create a free account if you haven't already.
 2. Create a DBT Project
    - Select Big Query as your datawarehouse for your development connection
@@ -244,7 +247,7 @@ DBT cloud was used for the data transformation stage in this project, refer to t
 2. Create a connection to your Google Cloud account to access the datasets in Big Query. To do this, go to the get data section in Power BI and  Search for  Google Big Query.
 3. Model the fact and dimension tables in the model view as seen below:
 ![Screenshot (75)](https://github.com/user-attachments/assets/5f186415-05cb-4a0f-862c-bab0d5eb57d1)
-4. Start building the dashboard; it's important to note that certain calculated fields, like the Average Price, have been created
+4. Start building the dashboard; it's important to note that certain calculated fields, like the Average Price Measure, MoM Price Growth Rate, Calendar Date Table, have been created.
 
 ## Analytics Report/Dashboard 
 The live interactive dashboard  can be viewed here [Stats Canada Power BI Dashboard/Report](https://app.powerbi.com/view?r=eyJrIjoiODdkYTFlMjEtYWFiMi00YzZlLWIyODEtYzlhYjk2OWQwZmIxIiwidCI6IjA2ZjNhOGJlLThkYWUtNGM5MS05Y2RhLTliZTM3ZjhmYTgyNiJ9), it presents insights across three key pages :
@@ -253,11 +256,11 @@ The live interactive dashboard  can be viewed here [Stats Canada Power BI Dashbo
 ![Screenshot (82)](https://github.com/user-attachments/assets/9314f909-78a9-43c7-b9af-c7cde6782201)
 
 2. Provincial
-3. 
+   
 ![Screenshot (81)](https://github.com/user-attachments/assets/b91706d2-df13-4aef-8b9a-b03e29748739)
 
 4. Month-on-Month Price Growth Tracker
-5. 
+   
 ![Screenshot (80)](https://github.com/user-attachments/assets/050a3bcc-556b-4e48-aa66-47e7dce2cf58)
 
 ## Contact 
