@@ -10,9 +10,9 @@
 - [Analytics Report/Dashboard](#Analytics-ReportDashboard) 
 ## Overview
 ### 
-Food and household essential product prices are among the most universally impactful economic indicators—they affect individuals, families, communities, and entire nations. Whether you're a policymaker setting inflation targets, a retailer managing inventory, or a consumer budgeting for groceries, understanding food price trends is essential for making informed decisions.
+Food and household essential product prices are among the most universally impactful economic indicators affecting individuals, families, communities, and nations. Whether you're a policymaker setting inflation targets, a retailer managing inventory, or a consumer budgeting for groceries, understanding food price trends is essential for making informed decisions.
 
-In recent years, global food markets have experienced significant volatility due to inflation, climate change, geopolitical events, and supply chain disruptions. These changes ripple into household budgets, nutritional access, and political stability. In Canada, like in many other nations, tracking food price fluctuations helps:
+Global food and product markets have experienced significant volatility in recent years due to inflation, climate change, geopolitical events, and supply chain disruptions. These changes ripple into household budgets, nutritional access, and political stability. In Canada, like in many other nations, tracking selected essential food and product price fluctuations helps:
 
 - Households plan spending, savings, and consumption habits.
 
@@ -22,15 +22,15 @@ In recent years, global food markets have experienced significant volatility due
 
 - Researchers and economists analyze inflation, economic inequality, and long-term trends.
 
-In short, food prices are a daily reality and an economic signal.
+In short, household essential product prices are a daily reality and an economic signal.
 
-This project analyzes Canada's average retail food and product prices by building an automated data pipeline that ingests public data, transforms it into clean analytical models, and visualizes key trends. This helps stakeholders understand what’s changing, why it matters, and who it impacts.
+This project analyzes Canada's average retail  prices for selected products by building an automated data pipeline that ingests public data, transforms it into clean analytical models, and visualizes key trends. This helps stakeholders understand what’s changing, why it matters, and who it impacts.
 
 It answers key analytical questions such as:
 
-- How have food prices changed in Canada and across provinces over time?
+- How have food and product prices changed in Canada and across provinces over time?
 
-- Which food categories and products have experienced the highest or lowest  price growth?
+- Which  product categories or products have experienced the highest or lowest  price growth?
 
 - How do prices compare nationally vs. regionally?
 
